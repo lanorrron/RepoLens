@@ -10,7 +10,19 @@ import (
 func DetectLanguage(root string) string {
 	counts := map[string]int{}
 
-	ignoreDirs := []string{"node_modules", "dist", ".git"}
+	ignoreDirs := []string{
+		"node_modules",
+		"dist",
+		".git",
+		"build",
+		"vendor",
+		".next",
+		"out",
+		"coverage",
+		".sst",
+		".turbo",
+		".cache",
+	}
 
 	info, err := os.Stat(root)
 	if err != nil || !info.IsDir() {

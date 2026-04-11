@@ -7,6 +7,7 @@ import (
 	"RepoLens/internal/prompts"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func Log(msg string, info string) {
@@ -45,7 +46,13 @@ func RunWithRetries(cfg *config.Config, code string, lang string, attempts int) 
 		fmt.Println("Output:", output)
 
 		fmt.Println("Trying to fix script...")
-		code, err = llm.FixScript(cfg, code, err.Error())
+
+		fixInput := err.Error()
+		if strings.TrimSpace(output) != "" {
+			fixInput += "\n\nOUTPUT:\n" + output
+		}
+
+		code, err = llm.FixScript(cfg, code, fixInput)
 		if err != nil {
 			Exit("fix error", err)
 		}

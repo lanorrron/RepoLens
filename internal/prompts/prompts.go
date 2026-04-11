@@ -54,25 +54,80 @@ REPO PATH:
 LANGUAGE DETECTED:
 %s
 
+GOAL:
+Analyze ONLY real developer-written source code.
+You MUST aggressively filter out non-source files.
+
 REQUIREMENTS:
 - Walk the repository recursively
-- Read source files depending on language:
-  - go → .go
-  - typescript → .ts, .tsx
-  - javascript → .js, .jsx
-  - python → .py
-- Ignore directories:
-  node_modules, .git, dist, build, vendor
+- Only process files matching the detected language:
+
+  go -> .go
+  typescript -> .ts, .tsx
+  javascript -> .js, .jsx
+  python -> .py
+
+STRICT SOURCE FILTERING:
+
+ALWAYS INCLUDE:
+- Files inside: src/, app/, pages/, internal/, pkg/, cmd/, lib/, server/, api/
+
+ALWAYS IGNORE DIRECTORIES:
+- node_modules
+- .git
+- dist
+- build
+- .next
+- out
+- coverage
+- tmp
+- temp
+- vendor
+- .cache
+- .turbo
+- .vercel
+
+ALWAYS IGNORE FILE TYPES:
+- .map
+- .min.js
+- .log
+- .lock
+- .sum
+- .meta
+- .sst
+- .previewinfo
+- .tsbuildinfo
+- .ico
+- .png
+- .jpg
+- .svg
+- .woff
+- .woff2
+
+HEURISTICS:
+- If file size > 1MB → SKIP
+- If file contains long single-line code → SKIP (likely minified)
+- If file path contains "generated", "bundle", "chunk", "vendor" → SKIP
 
 OUTPUT:
 - Print file path
-- Print first 200 lines of each file
+- Print only meaningful source code
+- Skip files without relevant logic
+- Limit output to 150 lines per file
+- Prioritize:
+  - business logic
+  - API handlers
+  - services
+  - database code
+  - auth
+  - configuration
 
 STRICT RULES:
 - ONLY Go
 - ONLY standard library
-- DO NOT delete or modify files
-- DO NOT execute external commands
+- DO NOT modify files
+- DO NOT execute commands
+- MUST compile
 
 Return ONLY Go code.
 `

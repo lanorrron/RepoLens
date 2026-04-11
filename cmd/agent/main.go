@@ -4,7 +4,11 @@ import (
 	"RepoLens/internal/config"
 	"RepoLens/internal/inspector"
 	"RepoLens/internal/runner"
+	"bufio"
 	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -17,7 +21,11 @@ func main() {
 		fmt.Println("config error:", err)
 		return
 	}
-	repoPath := "repo path"
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("Enter the repository path: ")
+
+	repoPath, _ := reader.ReadString('\n')
+	repoPath = strings.TrimSpace(repoPath)
 
 	lang := inspector.DetectLanguage(repoPath)
 	runner.Log("Detected language", lang)
@@ -27,7 +35,7 @@ func main() {
 
 	report := runner.AnalyzeRepo(cfg, output)
 	runner.SaveReport("report.md", report)
-	repoReportPath := repoPath + "/AI_REPORT.md"
+	repoReportPath := filepath.Join(repoPath, "AI_REPORT.md")
 	runner.SaveReport(repoReportPath, report)
 
 	runner.Log("Report generated", "report.md")
