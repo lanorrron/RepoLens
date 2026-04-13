@@ -28,7 +28,16 @@ func GenerateScript(cfg *config.Config, lang string, repoPath string) string {
 	if err != nil {
 		Exit("generate script error", err)
 	}
+
+	SaveScript("analysis_script."+lang, code)
+
 	return code
+}
+
+func SaveScript(path string, code string){
+	if err := os.WriteFile(path, []byte(code), 0755); err != nil {
+		Exit("write script error", err);
+	}
 }
 
 func RunWithRetries(cfg *config.Config, code string, lang string, attempts int) string {
