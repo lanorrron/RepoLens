@@ -48,7 +48,13 @@ func Run(code string) (string, error) {
 		return "", fmt.Errorf("write file error: %w", err)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	if _, err := exec.LookPath("goimports"); err == nil {
+		cmdFmt := exec.Command("goimports", "-w", file.Name())
+		if err := cmdFmt.Run(); err != nil {
+			fmt.Println("warning: goimports failed:", err)
+		}
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	cmd := exec.CommandContext(ctx, "go", "run", file.Name())

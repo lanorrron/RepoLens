@@ -121,6 +121,11 @@ OUTPUT:
   - database code
   - auth
   - configuration
+  
+STRICT IMPORT RULES:
+- Only include imports that are actually used
+- DO NOT include unused imports
+- The code MUST compile without modification
 
 STRICT RULES:
 - ONLY Go

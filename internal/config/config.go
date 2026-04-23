@@ -17,7 +17,7 @@ func Load() (*Config, error) {
 	}
 	model := os.Getenv("OPENAI_MODEL")
 	if model == "" {
-		model = "gpt-4.1-mini"
+		model = "gpt-5.4"
 	}
 	return &Config{
 		OpenAIAPIKey: apikey,
